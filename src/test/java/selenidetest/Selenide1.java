@@ -20,6 +20,7 @@ public class Selenide1 {
 
     @Test
     void shouldFindSelenideRepositoryAtTheTop() {
+
         //открыть главную страницу
         open("https://github.com");
         //ввести в поиск селенид и нажать энтер
@@ -34,9 +35,23 @@ public class Selenide1 {
 
         $(byText("SoftAssertions")).click();
 
-//проверка: кусок кода о JUnit 5 содержит метод тест
-        $("#user-content-3-using-junit5-extend-test-class").parent().sibling(0).shouldHave(text("@Test"));
+        // cоздаем многострочный литерал
 
+        String JUnit5Example = """
+                @ExtendWith({SoftAssertsExtension.class})
+                        class Tests {
+                            @Test
+                            void test() {
+                                Configuration.assertionMode = SOFT;
+                                open("page.html");
 
+                                $("#first").should(visible).click();
+                                $("#second").should(visible).click();
+                            }
+                        }
+                        """;
+//проверка: кусок кода о JUnit 5 содержит текст из литерала
+
+        $("#user-content-3-using-junit5-extend-test-class").parent().sibling(0).shouldHave(text(JUnit5Example));
     }
 }
